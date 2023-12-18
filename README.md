@@ -45,4 +45,4 @@ Se crea una base de datos llamada mywacc. configurada en PostgreSQL, y las crede
 
 ### d. Consideraciones
 
-Se ha implementado el manejo de errores con la API externa para evitar la interrupción del programa. Es importante destacar que realizar múltiples llamadas consecutivas a la API puede provocar la caída de los gráficos o valores mostrados debido a la falta de respuestas de la API.
+Se ha implementado el manejo de errores con la API externa para evitar la interrupción del programa. Es importante destacar que realizar múltiples llamadas consecutivas a la API puede provocar la caída de los gráficos o valores mostrados debido a la falta de respuestas de la API. En ese caso hay que volver a ejecutar el programa.
