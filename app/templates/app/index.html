@@ -1,0 +1,21 @@
+<!-- app/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mywacc App</title>
+    <!-- Include Plotly JavaScript library -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <!-- Render the Plotly chart -->
+    <div id="bitcoin-chart"></div>
+    <script>
+        // Parse the chart data from the Django context
+        var chartData = JSON.parse('{{ chart|safe }}');  
+        
+        // Display the Plotly chart
+        Plotly.newPlot('bitcoin-chart', chartData);
+    </script>
+</body>
+</html>
