@@ -79,8 +79,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'mywacc',
-        'USER': 'mywacc_admin',
-        'PASSWORD': 'mipass123',
+        'USER': 'postgres',
+        'PASSWORD': 'Riverplate123',
         'HOST': 'localhost',
         'PORT': '5432',
     }
