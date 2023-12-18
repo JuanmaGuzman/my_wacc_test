@@ -1,4 +1,4 @@
 from django.contrib import admin
-from .models import BitcoinPrice
+from .models import BitcoinValue
 
-admin.site.register(BitcoinPrice)
+admin.site.register(BitcoinValue)

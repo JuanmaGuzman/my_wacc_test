@@ -8,7 +8,17 @@
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
-    <!-- Render the Plotly chart -->
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Submit">
+    </form>
+
+    <!-- Display specific value -->
+    <div id="specific-value">
+        {{ specific_value }}
+    </div>
+    
     <div id="bitcoin-chart"></div>
     <script>
         // Parse the chart data from the Django context
