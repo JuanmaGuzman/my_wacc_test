@@ -1,29 +1,107 @@
-<!-- app/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Mywacc App</title>
+    <title>Mywacc test app</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+
+        .form-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        form {
+            flex: 1;
+            max-width: 400px;
+            margin: 0;
+            padding: 15px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="text"], input[type="date"], input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            border-radius: 5px;
+        }
+
+        input[type="date"] {
+            margin-top: 8px;
+        }
+
+        input[type="submit"] {
+            background-color: #4caf50;
+            color: white;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        #specific-value {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        #bitcoin-chart {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
+
     <!-- Include Plotly JavaScript library -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Submit">
-    </form>
+    <div class="form-container">
+        <!-- Form for specific date selection -->
+        <form method="post">
+            {% csrf_token %}
+            {{ date_selection_form.as_p }}
+            <input type="submit" value="Submit">
+        </form>
 
+        <!-- New form for date range selection -->
+        <form method="post">
+            {% csrf_token %}
+            {{ date_range_form.as_p }}
+            <input type="submit" value="Calculate Average">
+        </form>
+    </div>
+    
     <!-- Display specific value -->
     <div id="specific-value">
         {{ specific_value }}
     </div>
-    
+
+
     <div id="bitcoin-chart"></div>
     <script>
         // Parse the chart data from the Django context
         var chartData = JSON.parse('{{ chart|safe }}');  
-        
+
         // Display the Plotly chart
         Plotly.newPlot('bitcoin-chart', chartData);
     </script>

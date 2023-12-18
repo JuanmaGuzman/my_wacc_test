@@ -1,5 +1,6 @@
 import requests
-import datetime
+import datetime as dt
+from datetime import datetime, timedelta
 import plotly.express as px
 from .models import BitcoinValue
 
@@ -48,7 +49,7 @@ def create_chart(prices):
             raise ValueError("Invalid timestamps or prices data. Both should be non-null iterables.")
 
         # Convert timestamps to human-readable date labels
-        date_labels = [datetime.datetime.utcfromtimestamp(timestamp / 1000).strftime('%Y-%m-%d') for timestamp in timestamps]
+        date_labels = [dt.datetime.utcfromtimestamp(timestamp / 1000).strftime('%Y-%m-%d') for timestamp in timestamps]
 
         # Create a Plotly line chart
         fig = px.area(x=date_labels,
@@ -119,3 +120,42 @@ def get_bitcoin_specific_price(specific_date):
         except requests.exceptions.RequestException as e:
             print(f"Error during API request: {e}")
             return None
+
+
+def get_bitcoin_average_price(start_date, end_date):
+    total = 0
+    avg = 0
+
+    # Convert datetime.date to datetime.datetime with time set to midnight
+    start_datetime = datetime.combine(start_date, datetime.min.time())
+    end_datetime = datetime.combine(end_date, datetime.min.time()) + timedelta(days=1)  # Add one day to include the end date
+
+    api_url = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart/range"
+
+    params = {
+        "vs_currency": "usd",
+        "from": int(start_datetime.timestamp()),
+        "to": int(end_datetime.timestamp()),
+    }
+
+    response = requests.get(api_url, params=params)
+    
+    try:
+        response.raise_for_status()
+        data = response.json()
+
+        if response.status_code == 200:
+            prices = data.get("prices", [])
+
+            if prices:
+                for item in prices:
+                    total += item[1]
+
+                avg = total / len(prices)
+
+        return avg
+
+    except requests.exceptions.RequestException as e:
+        print(f"Error in API request: {e}")
+
+        return "To many requests"
