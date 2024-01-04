@@ -18,6 +18,8 @@ from .utils import (
     get_bitcoin_average_price,
 )
 from .forms import DateSelectionForm, DateRangeSelectionForm
+from django.http import HttpResponseBadRequest
+
 
 class TypeformSubmission(APIView):
     permission_classes = [AllowAny]
@@ -40,16 +42,25 @@ class TypeformSubmission(APIView):
 
     @csrf_exempt
     def post(self, request, *args, **kwargs):
-        body = request.data
+        body = request.body
+        received_signature = request.headers.get("X-Hub-Signature")
+        secret = "hi"  # Replace with your actual secret
 
-        received_signature = request.headers.get("typeform-signature")
-        print(f"received_signature: {received_signature}")
+        if not received_signature:
+            return HttpResponseBadRequest("X-Hub-Signature not present in the request headers")
 
-        if received_signature is None:
-            return Response(
-                {"Fail": "Permission denied."}, status=status.HTTP_403_FORBIDDEN
-            )
+        # Compute the expected signature
+        expected_signature = "sha1=" + hmac.new(
+            key=bytes(secret, "utf-8"),
+            msg=body,
+            digestmod=hashlib.sha1
+        ).hexdigest()
 
+        # Compare the signatures
+        if not hmac.compare_digest(received_signature, expected_signature):
+            return HttpResponseBadRequest("Invalid signature")
+
+        # Continue with your webhook processing logic
         return Response({}, status=status.HTTP_200_OK)
 
         print(f"received_signature: {received_signature}")
