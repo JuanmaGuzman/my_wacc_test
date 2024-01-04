@@ -1,8 +1,15 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
-from rest_framework.routers import DefaultRouter
+
+webhooks = [
+    path(
+        "typeform/submission",
+        views.TypeformSubmission.as_view(),
+        name="TypeformSubmission"
+    )
+]
 
 urlpatterns = [
-    # ... your other patterns ...
     path("", views.index, name="index"),
+    path("webhooks/", include((webhooks, "webhooks"))),
 ]
