@@ -49,6 +49,8 @@ class TypeformSubmission(APIView):
                 {"Fail": "Permission denied."}, status=status.HTTP_403_FORBIDDEN
             )
 
+        return Response({}, status=status.HTTP_200_OK)
+
         print(f"received_signature: {received_signature}")
         sha_name, signature = received_signature.split("=", 1)
         if sha_name != "sha256":
