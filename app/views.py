@@ -43,6 +43,7 @@ class TypeformSubmission(APIView):
         body = request.data
 
         received_signature = request.headers.get("typeform-signature")
+        print(f"received_signature: {received_signature}")
 
         if received_signature is None:
             return Response(
